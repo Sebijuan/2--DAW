@@ -11,5 +11,9 @@
   },
   "author": "Sebastian Juan Coca",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "@faker-js/faker": "^9.0.3",
+    "chalk": "^5.3.0"
+  }
 }
