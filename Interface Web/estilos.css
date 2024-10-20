@@ -1,0 +1,71 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2rem;
+}
+
+/* Primer párrafo */
+.parrafo1 {
+    text-indent: 50px;
+    font-family: 'Georgia', serif;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    font-style: italic;
+}
+
+/* Segundo párrafo */
+.parrafo2 {
+    text-align: justify;
+    word-spacing: 10px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Tercer párrafo */
+.parrafo3 {
+    text-decoration: underline;
+    font-variant: small-caps;
+    font-size: 1.3rem;
+    line-height: 2;
+    color: #1e90ff;
+}
+
+/* Cuarto párrafo */
+.parrafo4 {
+    text-transform: uppercase;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    text-align: right;
+}
+
+/* Quinto párrafo */
+.parrafo5 {
+    text-indent: 30px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2rem;
+    font-weight: lighter;
+    letter-spacing: 1px;
+    text-decoration: overline;
+    line-height: 1.8;
+    vertical-align: baseline;
+}
+
+/* Sexto párrafo */
+.parrafo6 {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    line-height: 2.2;
+    word-spacing: 5px;
+}
