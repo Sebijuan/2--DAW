@@ -1,0 +1,14 @@
+{
+  "name": "09nodejs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "add": "node index.js add \"Programacion\" \"Javascript\"",
+    "list": "node index.js list",
+    "delete": "node index.js delete \"Programacion\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sebi",
+  "license": "ISC",
+  "description": ""
+}
