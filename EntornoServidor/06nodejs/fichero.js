@@ -2,7 +2,7 @@ const fs = require('fs');
 
 
 if (process.argv.length < 3) {
-    console.log('Por favor, proporciona el nombre del archivo como argumento.');
+    console.log('Por favor, escribe el nombre del archivo como argumento.');
     process.exit(1); 
 }
 
