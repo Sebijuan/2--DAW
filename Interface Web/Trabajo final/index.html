@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concesionario de Lujo Sebjuan</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Encabezado -->
+    <header class="header">
+        <img src="imagenes/logo.png" alt="Logotipo del concesionario" class="logo">
+        <nav>
+            <ul>
+                <li><a href="#modelos" onclick="mostrarSeccion('modelos')">Modelos</a></li>
+                <li><a href="#ofertas" onclick="mostrarSeccion('ofertas')">Ofertas</a></li>
+                <li><a href="#login" onclick="mostrarSeccion('login')">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Sección Promocional -->
+    <section class="promocion">
+        <div class="texto-promocion">
+            <h1>Tu nuevo vehículo de lujo en stock</h1>
+            <p>Encuentra el modelo que buscas con disponibilidad inmediata. Haz clic y estrénalo.</p>
+            <button onclick="mostrarSeccion('comprar')">Encuéntralo</button>
+        </div>
+        <img src="imagenes/promocion.jpg" alt="Vehículos en promoción">
+    </section>
+
+    <!-- Secciones según el esquema inicial, todas ocultas al inicio -->
+    <section id="comprar" class="seccion oculto">
+        <h2>Compra de Vehículos</h2>
+        <button onclick="mostrarSeccion('todosVehiculos')">Todos los Vehículos</button>
+        <button onclick="mostrarSeccion('modelos')">Modelos</button>
+    </section>
+
+    <section id="todosVehiculos" class="seccion oculto">
+        <h2>Todos los Vehículos</h2>
+        <button onclick="mostrarSeccion('seleccionarVehiculo')">Seleccionar Vehículo</button>
+    </section>
+
+    <section id="modelos" class="seccion oculto">
+        <h2>Modelos Disponibles</h2>
+        <button onclick="mostrarSeccion('seleccionarVehiculo')">Seleccionar Vehículo</button>
+    </section>
+
+    <section id="seleccionarVehiculo" class="seccion oculto">
+        <h2>Selecciona tu Vehículo</h2>
+        <button onclick="mostrarSeccion('configurarVehiculo')">Configurar Vehículo</button>
+    </section>
+
+    <section id="configurarVehiculo" class="seccion oculto">
+        <h2>Configura tu Vehículo</h2>
+        <button onclick="mostrarSeccion('efectuarCompra')">Efectuar Compra</button>
+    </section>
+
+    <section id="efectuarCompra" class="seccion oculto">
+        <h2>Compra Realizada</h2>
+        <p>Gracias por tu compra. Pronto recibirás información sobre la entrega.</p>
+        <button onclick="mostrarSeccion('paginaPrincipal')">Volver a la Página Principal</button>
+    </section>
+
+    <section id="login" class="seccion oculto">
+        <h2>Inicia Sesión</h2>
+        <p>Por favor, inicia sesión para continuar con tu compra o venta de vehículos.</p>
+        <button onclick="mostrarSeccion('comprar')">Continuar</button>
+    </section>
+
+    <section id="vender" class="seccion oculto">
+        <h2>Venta de Vehículos</h2>
+        <button onclick="mostrarSeccion('especificarVehiculo')">Especifica tu Vehículo</button>
+    </section>
+
+    <section id="especificarVehiculo" class="seccion oculto">
+        <h2>Especifica tu Vehículo</h2>
+        <button onclick="mostrarSeccion('valoracionPrecio')">Ver Valorador de Precio</button>
+    </section>
+
+    <section id="valoracionPrecio" class="seccion oculto">
+        <h2>Valoración de Precio</h2>
+        <p>El precio estimado de tu vehículo es de $XX,XXX.XX</p>
+        <button onclick="mostrarSeccion('efectuarCompra')">Efectuar Compra</button>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
