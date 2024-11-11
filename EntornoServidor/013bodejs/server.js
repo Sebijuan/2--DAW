@@ -1,18 +1,19 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 const port = 3000;
 
-
+// Ruta /page: Devuelve el archivo page.html
 app.get('/page', (req, res) => {
-    res.send('<h1>Bienvenido a la página principal</h1><p>Esta es la página de contenido principal.</p>');
+    res.sendFile(path.join(__dirname, 'views', 'page.html'));
 });
 
-
+// Ruta /error: Devuelve el archivo error.html con código 404
 app.get('/error', (req, res) => {
-    res.status(404).send('<h1>Error 404</h1><p>Página no encontrada.</p>');
+    res.status(404).sendFile(path.join(__dirname, 'views', 'error.html'));
 });
 
-
+// Iniciar el servidor
 app.listen(port, () => {
     console.log(`Servidor ejecutándose en http://localhost:${port}`);
 });
