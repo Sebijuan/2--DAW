@@ -1,10 +1,15 @@
 const express = require('express');
 const logger = require('./logger');
+const authMiddleware = require('./authMiddleware');
 
 const app = express();
 
-// Use the logger middleware
-app.use(logger);
+// Ensure logger is a middleware function
+if (typeof logger === 'function') {
+    app.use(logger);
+} else {
+    console.error('Logger is not a function');
+}
 
 // Define a simple route
 app.get('/', (req, res) => {
@@ -14,6 +19,11 @@ app.get('/', (req, res) => {
 // Define another route to test different status codes
 app.get('/error', (req, res) => {
     res.status(500).send('Internal Server Error');
+});
+
+// Add restricted route
+app.get('/restricted', authMiddleware, (req, res) => {
+    res.send('Bienvenid@, disfrute del contenido');
 });
 
 // Error handling middleware
