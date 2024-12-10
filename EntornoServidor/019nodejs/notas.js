@@ -1,35 +1,28 @@
-mport fs from 'fs';
-import readlineSync from 'readline-sync';
+import express from 'express';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import morgan from 'morgan';
+import notesRouter from './routes/notes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const notesDir = path.join(__dirname, 'notes');
+const app = express();
+const port = 3000;
 
-// Crear directorio de notas si no existe
-if (!fs.existsSync(notesDir)) {
-    fs.mkdirSync(notesDir);
-}
+// Logger middleware
+app.use(morgan('combined'));
 
-// Call the createNote function
-createNote();
+// Routes
+app.use('/notes', notesRouter);
 
-function createNote() {
-    const noteName = readlineSync.question('Introduce el nombre de la nota: ') + '.note';
-    const notePath = path.join(notesDir, noteName);
-    let content = '';
-    let line;
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
-    console.log('Escribe tu nota. Introduce dos líneas en blanco para finalizar.');
-
-    while (!(line === '' && content.endsWith('\n\n'))) {
-        line = readlineSync.question('');
-        if (line === '' && content.endsWith('\n\n')) break;
-        content += line + '\n';
-    }
-
-    fs.writeFileSync(notePath, content.trim());
-    console.log('Nota creada con éxito.');
-}
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}/`);
+});
