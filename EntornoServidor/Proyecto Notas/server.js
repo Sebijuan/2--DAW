@@ -4,6 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerDocument = require('./swagger.json');
 
 // Cargar variables de entorno
 dotenv.config({ path: path.resolve(__dirname, 'admin.env') });
@@ -15,6 +18,88 @@ const notesDir = path.join(__dirname, 'notes');
 if (!fs.existsSync(notesDir)) {
     fs.mkdirSync(notesDir);
 }
+
+// Swagger setup
+const swaggerOptions = {
+    swaggerDefinition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Notas API',
+            version: '1.0.0',
+            description: 'API para gestionar notas'
+        },
+        servers: [
+            {
+                url: 'http://localhost:3000',
+                description: 'Servidor local'
+            }
+        ]
+    },
+    apis: [path.join(__dirname, 'server.js')]
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Note:
+ *       type: object
+ *       properties:
+ *         path:
+ *           type: string
+ *         name:
+ *           type: string
+ */
+
+/**
+ * @swagger
+ * /import:
+ *   post:
+ *     summary: Importar notas
+ *     tags: [Notas]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               notes:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       200:
+ *         description: Notas importadas correctamente
+ *       401:
+ *         description: Acceso denegado
+ *       400:
+ *         description: Token inválido
+ */
+
+/**
+ * @swagger
+ * /export:
+ *   get:
+ *     summary: Exportar notas
+ *     tags: [Notas]
+ *     responses:
+ *       200:
+ *         description: Notas exportadas correctamente
+ *         content:
+ *           application/zip:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       401:
+ *         description: Acceso denegado
+ *       400:
+ *         description: Token inválido
+ */
 
 // Middleware para autenticar usando JWT
 const authenticateJWT = (req, res, next) => {
