@@ -32,6 +32,15 @@ app.listen(3002, () => {
     console.log('Server is running on http://localhost:3002');
 });
 
+// Ensure the port is not in use and the server is correctly configured
+app.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error('Port 3002 is already in use');
+    } else {
+        console.error('Server error:', err);
+    }
+});
+
 module.exports = {
     swaggerUi,
     specs,
