@@ -1,0 +1,365 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "Editor de Notas API",
+		"description": "API para gestionar notas",
+		"version": "1.0.0"
+	},
+	"servers": [
+		{
+			"url": "http://localhost:3002",
+			"description": "Servidor local"
+		}
+	],
+	"paths": {
+		"/upload_files": {
+			"post": {
+				"summary": "Subir archivos .note",
+				"requestBody": {
+						"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"files": {
+										"type": "string",
+										"format": "binary",
+										"description": "Archivos a subir"
+									}
+								},
+								"required": ["files"]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Archivos subidos con éxito",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/download/{titulo}": {
+			"get": {
+				"summary": "Descargar una nota",
+				"parameters": [
+					{
+						"name": "titulo",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "Título de la nota a descargar"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Nota descargada con éxito",
+						"content": {
+							"application/octet-stream": {
+								"schema": {
+									"type": "string",
+									"format": "binary"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Nota no encontrada"
+					}
+				}
+			}
+		},
+		"/notas/{titulo}": {
+			"get": {
+				"summary": "Leer una nota",
+				"parameters": [
+					{
+						"name": "titulo",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "Título de la nota a leer"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Contenido de la nota",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"titulo": {
+											"type": "string"
+										},
+										"contenido": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Nota no encontrada"
+					}
+				}
+			},
+			"put": {
+				"summary": "Editar una nota existente",
+				"parameters": [
+					{
+						"name": "titulo",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "Título de la nota a editar"
+					}
+				],
+				"requestBody": {
+						"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"contenido": {
+										"type": "string"
+									}
+								},
+								"required": ["contenido"]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Nota editada con éxito",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Nota no encontrada"
+					}
+				}
+			},
+			"delete": {
+				"summary": "Eliminar una nota",
+				"parameters": [
+					{
+						"name": "titulo",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "Título de la nota a eliminar"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Nota eliminada con éxito",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Nota no encontrada"
+					}
+				}
+			}
+		},
+		"/notas/buscar/{titulo}": {
+			"get": {
+				"summary": "Buscar una nota por título",
+				"parameters": [
+					{
+						"name": "titulo",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "Título de la nota a buscar"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Nota encontrada",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"titulo": {
+											"type": "string"
+										},
+										"contenido": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Nota no encontrada"
+					}
+				}
+			}
+		},
+		"/notas/importante/{titulo}": {
+			"post": {
+				"summary": "Marcar una nota como importante",
+				"parameters": [
+					{
+						"name": "titulo",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "Título de la nota a marcar como importante"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Nota marcada como importante",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Nota no encontrada"
+					}
+				}
+			}
+		},
+		"/notas/importantes": {
+			"get": {
+				"summary": "Filtrar notas importantes",
+				"responses": {
+					"200": {
+						"description": "Lista de notas importantes",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/notas": {
+			"post": {
+				"summary": "Crear una nueva nota",
+				"requestBody": {
+						"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"titulo": {
+										"type": "string"
+									},
+									"contenido": {
+										"type": "string"
+									}
+								},
+								"required": ["titulo", "contenido"]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Nota creada con éxito",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"summary": "Listar todas las notas",
+				"responses": {
+					"200": {
+						"description": "Lista de notas",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
