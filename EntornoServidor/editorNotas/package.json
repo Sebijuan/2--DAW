@@ -1,0 +1,36 @@
+{
+  "name": "editor-notas",
+  "version": "1.0.0",
+  "description": "Editor de notas",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "create": "node src/index.js 1",
+    "edit": "node src/index.js 2",
+    "delete": "node src/index.js 3",
+    "list": "node src/index.js 4",
+    "read": "node src/index.js 5",
+    "lint": "eslint --ignore-path .gitignore .",
+    "lint:fix": "eslint --fix --ignore-path .gitignore ."
+  },
+  "author": "juan tornay iglesias",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "multer": "^1.4.5-lts.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^8.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.24.2",
+    "globals": "^13.0.0",
+    "nodemon": "^2.0.15"
+  }
+}
