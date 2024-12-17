@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const app = {
-  port: 3002,
+  port: 3000, 
 };
 
 const config = {

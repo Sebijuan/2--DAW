@@ -13,7 +13,7 @@ const options = {
         },
         servers: [
             {
-                url: 'http://localhost:3002',
+                url: 'http://localhost:3000', 
             },
         ],
     },
@@ -28,18 +28,21 @@ app.get('/', (req, res) => {
     res.send('Welcome to the Editor de Notas API');
 });
 
-app.listen(3002, () => {
-    console.log('Server is running on http://localhost:3002');
-});
+const port = 3002;
 
-// Ensure the port is not in use and the server is correctly configured
-app.on('error', (err) => {
-    if (err.code === 'EADDRINUSE') {
-        console.error('Port 3002 is already in use');
-    } else {
-        console.error('Server error:', err);
-    }
-});
+function startServer(port) {
+    app.listen(port, () => {
+        console.log(`Server is running on http://localhost:${port}`);
+    }).on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+            console.error(`Port ${port} is already in use`);
+        } else {
+            console.error('Server error:', err);
+        }
+    });
+}
+
+startServer(port);
 
 module.exports = {
     swaggerUi,

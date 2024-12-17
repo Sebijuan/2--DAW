@@ -437,7 +437,6 @@ function manejarMenu(opcion) {
         case '0':
             rl.close();
             process.exit(0); // Termina el proceso de Node.js
-            break;
         default:
             console.log("Opción no válida");
             mostrarMenuPrincipal();
@@ -571,7 +570,7 @@ if (args.length === 0) {
     manejarMenu(opcion);
 }
 
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 
 server.listen(port, (err) => {
