@@ -6,10 +6,10 @@ const express = require('express');
 const config = require('./config');
 const multer = require('multer');
 const { swaggerUi, specs } = require('./swagger');
+const http = require('http');
 
 const app = express();
 app.use(express.json());
-
 
 const notesDir = path.join(__dirname, 'controllers', 'notes');
 
@@ -571,12 +571,22 @@ if (args.length === 0) {
     manejarMenu(opcion);
 }
 
-const { port } = config.app;
+const port = process.env.PORT || 3002;
+const server = http.createServer(app);
 
-app.listen(port, err => {
+server.listen(port, (err) => {
     if (err) {
-        logger.error(err);
+        console.error(`Error starting server: ${err}`);
         return;
     }
-    logger.info(`Servidor corriendo en el puerto ${port}!`);
+    console.log(`Server running on port ${port}`);
+});
+
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`Port ${port} is already in use, trying another port...`);
+        server.listen(0); // 0 will assign a random available port
+    } else {
+        console.error(`Server error: ${err}`);
+    }
 });
