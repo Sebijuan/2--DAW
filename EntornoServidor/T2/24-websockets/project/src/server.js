@@ -35,6 +35,10 @@ io.on('connection', (socket) => {
     // Enviar mensajes anteriores al cliente
     socket.emit('previousMessages', messages[room]);
     console.log(`Usuario ${socket.id} se unió a la sala ${room}`);
+    // Notificar a la sala que un usuario se ha unido
+    const joinMessage = `Usuario ${socket.id} se unió a la sala ${room}`;
+    messages[room].push(joinMessage);
+    io.to(room).emit('joinMessage', joinMessage);
   });
 
   // Escuchar mensajes del cliente

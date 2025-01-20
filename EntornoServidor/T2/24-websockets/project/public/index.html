@@ -84,6 +84,13 @@
       messages.appendChild(li);
     });
 
+    // Escuchar mensajes de unión del servidor
+    socket.on('joinMessage', (msg) => {
+      const li = document.createElement('li');
+      li.textContent = msg; // Mostrar mensaje de unión
+      messages.appendChild(li);
+    });
+
     // Enviar mensajes al servidor
     form.addEventListener('submit', (e) => {
       e.preventDefault();
