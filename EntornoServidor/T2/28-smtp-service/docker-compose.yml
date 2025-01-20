@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+  app:
+    build:
+      context: ./app
+    working_dir: /usr/src/app
+    volumes:
+      - ./app:/usr/src/app
+    env_file:
+      - ./app/.env
+    command: node index.js
+    depends_on:
+      - mailhog
