@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat en Vivo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    #messages { list-style: none; padding: 0; }
+    #messages li { padding: 8px; margin-bottom: 4px; background: #f0f0f0; border-radius: 4px; }
+    #form { display: flex; gap: 8px; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <h1>Chat en Vivo</h1>
+  <ul id="messages"></ul>
+  <form id="form">
+    <input id="input" autocomplete="off" placeholder="Escribe un mensaje..." />
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script>
+    const socket = io('http://10.200.33.156:3000'); // Conectar al servidor en tu IP local
+
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const messages = document.getElementById('messages');
+
+    // Escuchar mensajes del servidor
+    socket.on('message', (msg) => {
+      const li = document.createElement('li');
+      li.textContent = msg;
+      messages.appendChild(li);
+    });
+
+    // Enviar mensajes al servidor
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit('message', input.value); // Emitir mensaje
+        input.value = ''; // Limpiar el campo
+      }
+    });
+  </script>
+</body>
+</html>
