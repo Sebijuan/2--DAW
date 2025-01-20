@@ -14,14 +14,19 @@
     button { padding: 10px 20px; background-color: orange; border: none; border-radius: 4px; color: white; font-size: 16px; cursor: pointer; }
     button:hover { background-color: darkorange; }
     input { padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; }
+    #current-room { margin-top: 16px; font-size: 18px; font-weight: bold; }
+    .room-button { margin: 5px; }
   </style>
 </head>
 <body>
   <h1>Chat en Vivo</h1>
-  <form id="room-form">
-    <input id="room-input" autocomplete="off" placeholder="Nombre de la sala..." />
-    <button type="submit">Crear Sala</button>
-  </form>
+  <div id="room-buttons">
+    <button class="room-button" data-room="Sala 1">Sala 1</button>
+    <button class="room-button" data-room="Sala 2">Sala 2</button>
+    <button class="room-button" data-room="Sala 3">Sala 3</button>
+    <button class="room-button" data-room="Sala 4">Sala 4</button>
+  </div>
+  <div id="current-room"></div>
   <ul id="messages"></ul>
   <form id="form">
     <input id="input" autocomplete="off" placeholder="Escribe un mensaje..." />
@@ -31,26 +36,35 @@
   <script>
     const socket = io('http://10.200.33.156:3000'); // Conectar al servidor en tu IP local
 
-    const roomForm = document.getElementById('room-form');
-    const roomInput = document.getElementById('room-input');
+    const roomButtons = document.querySelectorAll('.room-button');
     const form = document.getElementById('form');
     const input = document.getElementById('input');
     const messages = document.getElementById('messages');
+    const currentRoomDisplay = document.getElementById('current-room');
     let currentRoom = '';
+    const localMessages = JSON.parse(localStorage.getItem('localMessages')) || {};
 
-    // Crear sala y unirse a ella
-    roomForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (roomInput.value) {
-        currentRoom = roomInput.value;
+    // Unirse a una sala predefinida
+    roomButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        currentRoom = button.getAttribute('data-room');
         socket.emit('joinRoom', currentRoom); // Emitir evento para unirse a la sala
         messages.innerHTML = ''; // Limpiar mensajes anteriores
-        roomInput.value = ''; // Limpiar el campo
-      }
+        currentRoomDisplay.textContent = `Sala actual: ${currentRoom}`; // Mostrar el nombre de la sala actual
+        if (localMessages[currentRoom]) {
+          localMessages[currentRoom].forEach(msg => {
+            const li = document.createElement('li');
+            li.textContent = msg;
+            messages.appendChild(li);
+          });
+        }
+      });
     });
 
     // Escuchar mensajes anteriores del servidor
     socket.on('previousMessages', (msgs) => {
+      localMessages[currentRoom] = msgs;
+      localStorage.setItem('localMessages', JSON.stringify(localMessages));
       msgs.forEach((msg) => {
         const li = document.createElement('li');
         li.textContent = msg;
@@ -60,6 +74,11 @@
 
     // Escuchar mensajes del servidor
     socket.on('message', (msg) => {
+      if (!localMessages[currentRoom]) {
+        localMessages[currentRoom] = [];
+      }
+      localMessages[currentRoom].push(msg.message);
+      localStorage.setItem('localMessages', JSON.stringify(localMessages));
       const li = document.createElement('li');
       li.textContent = msg.message; // Asegurarse de manejar correctamente los datos del mensaje
       messages.appendChild(li);
@@ -72,6 +91,19 @@
         socket.emit('message', { room: currentRoom, message: input.value }); // Emitir mensaje con la sala
         input.value = ''; // Limpiar el campo
       }
+    });
+
+    // Restaurar la última sala visitada
+    window.addEventListener('load', () => {
+      const lastRoom = localStorage.getItem('lastRoom');
+      if (lastRoom) {
+        document.querySelector(`.room-button[data-room="${lastRoom}"]`).click();
+      }
+    });
+
+    // Guardar la última sala visitada
+    window.addEventListener('beforeunload', () => {
+      localStorage.setItem('lastRoom', currentRoom);
     });
   </script>
 </body>
