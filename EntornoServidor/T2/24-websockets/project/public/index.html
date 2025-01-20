@@ -6,14 +6,22 @@
   <title>Chat en Vivo</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; }
+    body { font-family: Arial, sans-serif; background-color: #e0f7fa; }
     #messages { list-style: none; padding: 0; }
-    #messages li { padding: 8px; margin-bottom: 4px; background: #f0f0f0; border-radius: 4px; }
+    #messages li { padding: 8px; margin-bottom: 4px; background: #b3e5fc; border-radius: 4px; }
     #form { display: flex; gap: 8px; margin-top: 16px; }
+    #room-form { display: flex; gap: 8px; margin-bottom: 16px; }
+    button { padding: 10px 20px; background-color: orange; border: none; border-radius: 4px; color: white; font-size: 16px; cursor: pointer; }
+    button:hover { background-color: darkorange; }
+    input { padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; }
   </style>
 </head>
 <body>
   <h1>Chat en Vivo</h1>
+  <form id="room-form">
+    <input id="room-input" autocomplete="off" placeholder="Nombre de la sala..." />
+    <button type="submit">Crear Sala</button>
+  </form>
   <ul id="messages"></ul>
   <form id="form">
     <input id="input" autocomplete="off" placeholder="Escribe un mensaje..." />
@@ -23,22 +31,45 @@
   <script>
     const socket = io('http://10.200.33.156:3000'); // Conectar al servidor en tu IP local
 
+    const roomForm = document.getElementById('room-form');
+    const roomInput = document.getElementById('room-input');
     const form = document.getElementById('form');
     const input = document.getElementById('input');
     const messages = document.getElementById('messages');
+    let currentRoom = '';
+
+    // Crear sala y unirse a ella
+    roomForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (roomInput.value) {
+        currentRoom = roomInput.value;
+        socket.emit('joinRoom', currentRoom); // Emitir evento para unirse a la sala
+        messages.innerHTML = ''; // Limpiar mensajes anteriores
+        roomInput.value = ''; // Limpiar el campo
+      }
+    });
+
+    // Escuchar mensajes anteriores del servidor
+    socket.on('previousMessages', (msgs) => {
+      msgs.forEach((msg) => {
+        const li = document.createElement('li');
+        li.textContent = msg;
+        messages.appendChild(li);
+      });
+    });
 
     // Escuchar mensajes del servidor
     socket.on('message', (msg) => {
       const li = document.createElement('li');
-      li.textContent = msg;
+      li.textContent = msg.message; // Asegurarse de manejar correctamente los datos del mensaje
       messages.appendChild(li);
     });
 
     // Enviar mensajes al servidor
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      if (input.value) {
-        socket.emit('message', input.value); // Emitir mensaje
+      if (input.value && currentRoom) {
+        socket.emit('message', { room: currentRoom, message: input.value }); // Emitir mensaje con la sala
         input.value = ''; // Limpiar el campo
       }
     });

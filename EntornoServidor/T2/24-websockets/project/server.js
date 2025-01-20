@@ -19,15 +19,31 @@ const io = new Server(server, {
   }
 });
 
+// Almacenar mensajes en memoria
+const messages = {};
+
 // Manejar eventos de conexión
 io.on('connection', (socket) => {
   console.log(`Usuario conectado: ${socket.id}`);
 
+  // Unirse a una sala
+  socket.on('joinRoom', (room) => {
+    socket.join(room);
+    if (!messages[room]) {
+      messages[room] = [];
+    }
+    // Enviar mensajes anteriores al cliente
+    socket.emit('previousMessages', messages[room]);
+    console.log(`Usuario ${socket.id} se unió a la sala ${room}`);
+  });
+
   // Escuchar mensajes del cliente
   socket.on('message', (data) => {
-    console.log(`Mensaje recibido: ${data}`);
-    // Enviar el mensaje a todos los clientes
-    io.emit('message', data);
+    console.log(`Mensaje recibido en sala ${data.room}: ${data.message}`);
+    // Almacenar el mensaje
+    messages[data.room].push(data.message);
+    // Enviar el mensaje a todos los clientes en la sala
+    io.to(data.room).emit('message', { message: data.message });
   });
 
   // Manejar desconexiones
